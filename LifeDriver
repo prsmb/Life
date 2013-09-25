@@ -1,0 +1,21 @@
+/**
+ * Driver for the Life class
+ * @author Darian Cook
+ * Period 1
+ */
+public class LifeDriver 
+{
+	public static void main(String[]args)
+	{
+		Life myLife;
+		myLife = new Life();
+		for(int x = 0; x < 5; x++)
+		{
+			myLife.checkNeighbors();
+		
+		}//ends for loop
+		
+		myLife.countLiving();
+		myLife.print();
+	}//ends main method
+}//ends LifeDriver class

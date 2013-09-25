@@ -143,13 +143,8 @@ public class Life
 			{
 				if(arrGrid[x][y] == 1)
 				{
-					
 					numLiving ++;
 				}//ends if statement
-				else if(arrGrid[x][y] == 0)
-				{
-					System.out.println(" ");
-				}//ends else if
 			}//ends for loop
 		}//ends for loop
 		

@@ -1,0 +1,204 @@
+/**
+ * Game of Life
+ * @author Darian Cook
+ * Period 1
+ * 
+ */
+import java.util.Scanner;
+import java.io.*;
+public class Life
+{
+	int arrGrid[][] = new int[20][20];
+	public Scanner in = new Scanner(System.in);
+	public File f = new File("life100.txt");
+	public int xCord, yCord;
+	public int txtLength; 
+	int numRow10, numCol10, numLiving; //
+
+	public Life()
+	{
+		try
+        {
+            in = new Scanner(f);
+            numRow10 = 0;
+            numCol10 = 0;
+            numLiving = 0;
+        }//ends try block
+        catch(IOException e)
+        {
+            System.out.println("Error: File not found" + e.getMessage());
+        }//ends catch block
+
+
+		while(in.hasNext())
+		{ 
+			xCord = in.nextInt() - 1;
+			yCord = in.nextInt() - 1;
+			arrGrid[xCord][yCord] = 1;
+		}//ends while
+	}//ends Life constructor
+
+	/**
+	 * checks the total number of spaces around an index that are living
+	 */
+	public void checkNeighbors()
+	{
+		int numNeighbors = 0;
+		for(int x = 0; x < 19; x++)
+		{
+			for(int y = 0; y < 19; y++)
+			{		
+				if( x != 0 && y != 0 && arrGrid[x-1][y-1] == 1 ) //top left
+				{
+					numNeighbors++;
+				}//ends if 
+				if( y != 0 && arrGrid[x][y-1] == 1 ) //top
+				{
+					numNeighbors++;
+				}//ends if 
+				if( y != 0 && x != 19 && arrGrid[x+1][y-1] == 1 ) //top right
+				{
+					numNeighbors++;
+				}//ends if
+				if( x != 19 && arrGrid[x+1][y] == 1 ) //right
+				{
+					numNeighbors++;
+				}//ends if
+				if( x != 19 && y != 19 && arrGrid[x+1][y+1] == 1 ) //bottom right
+				{
+					numNeighbors++;
+				}//ends if
+				if( y != 19 && arrGrid[x][y+1] == 1 ) //bottom
+				{
+					numNeighbors++;
+				}//ends if
+				if( x != 0 && y != 19 && arrGrid[x-1][y+1] == 1) //bottom left
+				{
+					numNeighbors++;
+				}//ends if
+				if(x != 0 && arrGrid[x-1][y] == 1 ) //left
+				{
+					numNeighbors++;
+				}//ends if
+				
+// --------------------------------------- checks what will happen to current cell
+				
+				if( arrGrid[x][y] == 0 && numNeighbors == 3)
+				{
+					this.birth(x, y);
+				}//ends if
+				else if( arrGrid[x][y] == 1 && ( numNeighbors== 1 || numNeighbors == 0) )
+				{
+					this.death(x, y );
+				}//ends if
+			}//ends for loop
+		}//ends for loop
+	}//ends checkNeighbors method
+
+	/**
+	 * Sets an index to living if it has 3 neighbors
+	 * @param x
+	 * @param y
+	 */
+	public void birth(int x, int y)
+	{
+		arrGrid[x][y] = 1;		
+	}//ends birth method
+
+	/**
+	 * Sets an index to be dead if it has 1- or 4+ neighbors
+	 * @param x
+	 * @param y
+	 */
+	public void death(int x, int y)
+	{
+		arrGrid[x][y] = 0;
+	}//ends death method
+
+	/**
+	 * Counts and prints the total number of living organisms and the number of living organisms
+	 * in row 10 and column 10
+	 * @pre none
+	 * @param none
+	 * @return none
+	 * @post numLiving == number of bacteria in the grid after 5 generations
+	 */
+	public void countLiving()
+	{
+		for(int x = 0; x < 19; x++)
+		{
+ 			for(int y = 0; y < 19; y++)
+			{
+				if(arrGrid[x][y] == 1)
+				{
+					numLiving ++;
+				}//ends if statement
+			}//ends for loop
+		}//ends for loop
+
+//----------------------------------Counts the "living" objects in 10th row		
+
+		for( int col = 0; col <= 19; col++)
+		{
+			if(arrGrid[10][col] == 1)
+			{
+				numRow10++;
+			}//ends for
+		}//ends for
+//--------------------------------------------Counts the "living" objects in 10th column		
+
+		for( int row = 0; row <= 19; row++)
+		{
+			if(arrGrid[row][10] == 1)
+			{
+				numCol10++;
+			}//ends if
+		}//ends for
+		
+//-------------------------------------------- prints numbers counted above
+
+
+	}//ends countLiving method 
+
+	/**
+	 * This method prints bacteria and num of bacteria from assignment
+	 * @pre checkNeighbors executes 5 times
+	 * @param none
+	 * @return none
+	 * @post bacteria is printed on screen
+	 */
+	public void print()
+	{
+		int count = 0;
+		for(int x = 0; x < 19; x++)
+		{
+			for(int y = 0; y < 19; y++)
+			{
+				if(arrGrid[x][y] == 1)
+				{
+					System.out.print("*");
+					count++;
+					if(count == 19)
+					{
+						System.out.println();
+						count = 1; 
+					}//ends if
+				}//ends if
+				else
+				{
+					System.out.print(" ");
+					count++;
+					if(count == 19)
+					{
+						System.out.println();
+						count = 1;
+					}//ends 
+				}//ends else
+			}//ends for
+		}//ends for loop
+
+		System.out.println("Number in row 10 ---> " + numRow10);
+		System.out.println("Number in column 10 ---> " + numCol10);
+		System.out.println("Number of living organisms ---> " + numLiving);
+	}//ends print method
+}//ends Life class
